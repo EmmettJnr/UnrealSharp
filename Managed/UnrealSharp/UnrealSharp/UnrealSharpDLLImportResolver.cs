@@ -7,11 +7,19 @@ namespace UnrealSharp;
 
 public class UnrealSharpDllImportResolver(IntPtr internalHandle)
 {
+    public delegate IntPtr CustomOnResolveDllImportDelegate(string libraryName);
+    public static event CustomOnResolveDllImportDelegate? CustomOnResolveDllImport;
+
+    public static IntPtr CustomResolveDllImport(string libraryName)
+    {
+        return CustomOnResolveDllImport?.Invoke(libraryName) ?? IntPtr.Zero;
+    }
+
     public IntPtr OnResolveDllImport(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
     {
         if (libraryName != "__Internal")
         {
-            return IntPtr.Zero;
+            return CustomOnResolveDllImport?.Invoke(libraryName) ?? IntPtr.Zero;
         }
         
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

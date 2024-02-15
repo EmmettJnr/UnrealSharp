@@ -80,8 +80,8 @@ namespace UnrealSharp.Plugins
             {
                 return LoadUnmanagedDllFromPath(libraryPath);
             }
-            
-            return IntPtr.Zero;
+
+            return UnrealSharpDllImportResolver.CustomResolveDllImport(unmanagedDllName);
         }
     }
 }
