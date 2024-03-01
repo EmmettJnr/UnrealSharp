@@ -24,12 +24,15 @@ public:
 	{
 		FModuleManager::Get().OnModulesChanged().AddRaw(this, &FCSTypeRegistry::OnModulesChanged);
 	}
-	
-	static FCSTypeRegistry& Get()
-	{
-		static FCSTypeRegistry Instance;
-		return Instance;
-	}
+
+	// This instance doesn't seem to be globally static on mac
+	// static FCSTypeRegistry& Get()
+	// {
+	// 	static FCSTypeRegistry Instance;
+	// 	return Instance;
+	// }
+
+	static FCSTypeRegistry& Get();
 
 	bool ProcessMetaData(const FString& FilePath);
 

@@ -28,9 +28,17 @@
 
 using namespace ScriptGeneratorUtilities;
 
+FCSSupportedPropertyTranslators::~FCSSupportedPropertyTranslators()
+{
+	delete NullHandler;
+	NullHandler = nullptr;
+}
+
 FCSSupportedPropertyTranslators::FCSSupportedPropertyTranslators(const FCSNameMapper& InNameMapper, FCSInclusionLists& Blacklist) : NameMapper(InNameMapper)
 {
-	NullHandler.Reset(new FNullPropertyTranslator(*this));
+	//NullHandler.Reset(new FNullPropertyTranslator(*this));
+	
+	NullHandler = new FNullPropertyTranslator(*this);
 
 	AddBlittablePropertyTranslator(FInt8Property::StaticClass(), "sbyte");
 	AddBlittablePropertyTranslator(FInt16Property::StaticClass(), "short");

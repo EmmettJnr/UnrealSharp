@@ -30,15 +30,15 @@ extern const FName DeprecatedPropertyMetaDataKey;
 extern const FName DeprecatedFunctionMetaDataKey;
 extern const FName DeprecationMessageMetaDataKey;
 
-extern inline const TCHAR* FPropertyCallbacks = TEXT("FPropertyExporter");
-extern inline const TCHAR* UClassCallbacks = TEXT("UClassExporter");
-extern inline const TCHAR* CoreUObjectCallbacks = TEXT("UCoreUObjectExporter");
-extern inline const TCHAR* FBoolPropertyCallbacks = TEXT("FBoolPropertyExporter");
-extern inline const TCHAR* FStringCallbacks = TEXT("FStringExporter");
-extern inline const TCHAR* UObjectCallbacks = TEXT("UObjectExporter");
-extern inline const TCHAR* FArrayPropertyCallbacks = TEXT("FArrayPropertyExporter");
-extern inline const TCHAR* UScriptStructCallbacks = TEXT("UScriptStructExporter");
-extern inline const TCHAR* UFunctionCallbacks = TEXT("UFunctionExporter");
+inline const TCHAR* FPropertyCallbacks = TEXT("FPropertyExporter");
+inline const TCHAR* UClassCallbacks = TEXT("UClassExporter");
+inline const TCHAR* CoreUObjectCallbacks = TEXT("UCoreUObjectExporter");
+inline const TCHAR* FBoolPropertyCallbacks = TEXT("FBoolPropertyExporter");
+inline const TCHAR* FStringCallbacks = TEXT("FStringExporter");
+inline const TCHAR* UObjectCallbacks = TEXT("UObjectExporter");
+inline const TCHAR* FArrayPropertyCallbacks = TEXT("FArrayPropertyExporter");
+inline const TCHAR* UScriptStructCallbacks = TEXT("UScriptStructExporter");
+inline const TCHAR* UFunctionCallbacks = TEXT("UFunctionExporter");
 
 namespace ScriptGeneratorUtilities
 {

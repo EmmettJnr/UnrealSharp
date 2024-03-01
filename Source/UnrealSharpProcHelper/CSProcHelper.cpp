@@ -115,7 +115,13 @@ bool FCSProcHelper::GenerateProject()
 FString FCSProcHelper::GetRuntimeHostPath()
 {
 	FString DotNetPath = GetDotNetDirectory();
+
+#if PLATFORM_WINDOWS
 	FString RuntimeHostPath = FPaths::Combine(DotNetPath, "host/fxr", HOSTFXR_VERSION, HOSTFXR_WINDOWS);
+#elif PLATFORM_MAC
+	FString RuntimeHostPath = FPaths::Combine(DotNetPath, "host/fxr", HOSTFXR_VERSION, HOSTFXR_MAC);
+#endif
+	
 	return RuntimeHostPath;
 }
 
@@ -151,7 +157,11 @@ FString FCSProcHelper::GetManagedSourcePath()
 
 FString FCSProcHelper::GetUnrealSharpBuildToolPath()
 {
+#if PLATFORM_WINDOWS
 	return FPaths::ConvertRelativePathToFull(GetAssembliesPath() / "UnrealSharpBuildTool.exe");
+#else
+	return FPaths::ConvertRelativePathToFull(GetAssembliesPath() / "UnrealSharpBuildTool");
+#endif
 }
 
 FString FCSProcHelper::GetDotNetDirectory()
@@ -182,7 +192,11 @@ FString FCSProcHelper::GetDotNetDirectory()
 
 FString FCSProcHelper::GetDotNetExecutablePath()
 {
+#if PLATFORM_WINDOWS
 	return GetDotNetDirectory() + "dotnet.exe";
+#else
+	return GetDotNetDirectory() + "/dotnet";
+#endif
 }
 
 bool FCSProcHelper::BuildBindings(const FString& BuildConfiguration)

@@ -26,7 +26,7 @@ class FCSSupportedPropertyTranslators
 {
 public:
 	
-	virtual ~FCSSupportedPropertyTranslators() = default;
+	virtual ~FCSSupportedPropertyTranslators();
 	
 	FCSSupportedPropertyTranslators(const FCSNameMapper& InNameMapper, class FCSInclusionLists& CodeGenerator);
 
@@ -40,7 +40,11 @@ public:
 private:
 	
 	const FCSNameMapper& NameMapper;
-	TUniquePtr<FNullPropertyTranslator> NullHandler;
+	
+	//  UniquePtr.h(64, 3): deleting pointer to incomplete type 'FNullPropertyTranslator' may cause undefined behavior [-Werror,-Wdelete-incomplete]
+	//TUniquePtr<FNullPropertyTranslator> NullHandler;
+	FNullPropertyTranslator* NullHandler = nullptr;
+	
 	TMap<FName, TArray<FPropertyTranslator*>> TranslatorMap;
 
 	void AddPropertyTranslator(FFieldClass* PropertyClass, FPropertyTranslator* Handler);

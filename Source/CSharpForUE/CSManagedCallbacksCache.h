@@ -10,11 +10,11 @@ class CSHARPFORUE_API FCSManagedCallbacks
 
 	struct FManagedCallbacks
 	{
-		using ManagedCallbacks_CreateNewManagedObject = GCHandleIntPtr(__stdcall*)(void*, void*);
-		using ManagedCallbacks_InvokeManagedEvent = void(__stdcall*)(GCHandleIntPtr, void*, void*, void*);
-		using ManagedCallbacks_LookupMethod = void*(__stdcall*)(void*, const TCHAR*);
-		using ManagedCallbacks_LookupType = uint8*(__stdcall*)(GCHandleIntPtr, const TCHAR*, const TCHAR*);
-		using ManagedCallbacks_Dispose = void(__stdcall*)(GCHandleIntPtr);
+		using ManagedCallbacks_CreateNewManagedObject = GCHandleIntPtr(__cdecl*)(void*, void*);
+		using ManagedCallbacks_InvokeManagedEvent = void(__cdecl*)(GCHandleIntPtr, void*, void*, void*);
+		using ManagedCallbacks_LookupMethod = void*(__cdecl*)(void*, const TCHAR*);
+		using ManagedCallbacks_LookupType = uint8*(__cdecl*)(GCHandleIntPtr, const TCHAR*, const TCHAR*);
+		using ManagedCallbacks_Dispose = void(__cdecl*)(GCHandleIntPtr);
 		
 		ManagedCallbacks_CreateNewManagedObject CreateNewManagedObject;
 		ManagedCallbacks_InvokeManagedEvent InvokeManagedMethod;

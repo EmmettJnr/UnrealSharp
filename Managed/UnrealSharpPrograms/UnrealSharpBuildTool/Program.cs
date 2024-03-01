@@ -73,7 +73,12 @@ public static class Program
     
     public static string FixPath(string path)
     {
-        return path.Replace('/', '\\');
+        if (OperatingSystem.IsWindows())
+        {
+            return path.Replace('/', '\\');
+        }
+
+        return path;
     }
 
     public static string GetProjectNameAsManaged()
@@ -83,9 +88,14 @@ public static class Program
 
     public static string GetWeaver()
     {
-        return "UnrealSharpWeaver.exe";
+        if (OperatingSystem.IsWindows())
+        {
+            return "UnrealSharpWeaver.exe";
+        }
+
+        return "UnrealSharpWeaver";
     }
-    
+
     public static string GetVersion()
     {
         Version currentVersion = Environment.Version;

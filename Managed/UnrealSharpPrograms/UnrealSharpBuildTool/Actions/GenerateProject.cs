@@ -192,7 +192,13 @@ public class GenerateProject : BuildToolAction
         
         Uri relativeUri = baseUri.MakeRelativeUri(targetUri);
         
-        string relativePath = Uri.UnescapeDataString(relativeUri.ToString()).Replace('/', '\\');
+        string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+
+        if (OperatingSystem.IsWindows())
+            relativePath = relativePath.Replace('/', '\\');
+        
+        if (OperatingSystem.IsMacOS())
+            relativePath = Path.Combine("../", relativePath);
 
         return relativePath;
     }

@@ -19,6 +19,12 @@
 FUSScriptEngine* FCSManager::UnrealSharpScriptEngine = nullptr;
 UPackage* FCSManager::UnrealSharpPackage = nullptr;
 
+#if PLATFORM_MAC
+#define STRING_TO_CHAR_T TCHAR_TO_UTF8
+#else
+#define STRING_TO_CHAR_T (char_t*)
+#endif
+
 void FCSManager::InitializeUnrealSharp()
 {
 	FString DotNetInstallationPath =  FCSProcHelper::GetDotNetDirectory();
@@ -110,14 +116,14 @@ bool FCSManager::InitializeBindings()
 	// Load assembly and get function pointer.
 	FInitializeRuntimeHost InitializeUnrealSharp = nullptr;
 	
-	const char_t* EntryPointClassName = TEXT("UnrealSharp.Plugins.Main, UnrealSharp.Plugins");
-	const char_t* EntryPointFunctionName = TEXT("InitializeUnrealSharp");
+	const FString EntryPointClassName = TEXT("UnrealSharp.Plugins.Main, UnrealSharp.Plugins");
+	const FString EntryPointFunctionName = TEXT("InitializeUnrealSharp");
 
 	const FString UnrealSharpLibraryAssembly = FPaths::ConvertRelativePathToFull(FCSProcHelper::GetUnrealSharpLibraryPath());
 	
-	const int32 ErrorCode = LoadAssemblyAndGetFunctionPointer(*UnrealSharpLibraryAssembly,
-		EntryPointClassName,
-		EntryPointFunctionName,
+	const int32 ErrorCode = LoadAssemblyAndGetFunctionPointer(STRING_TO_CHAR_T(*UnrealSharpLibraryAssembly),
+		STRING_TO_CHAR_T(*EntryPointClassName),
+		STRING_TO_CHAR_T(*EntryPointFunctionName),
 		UNMANAGEDCALLERSONLY_METHOD,
 		nullptr,
 		reinterpret_cast<void**>(&InitializeUnrealSharp));
@@ -129,7 +135,7 @@ bool FCSManager::InitializeBindings()
 	}
 
 	// Entry point to C# to initialize UnrealSharp
-	if (!InitializeUnrealSharp(*UnrealSharpLibraryAssembly, &ManagedPluginsCallbacks, &FCSManagedCallbacks::ManagedCallbacks, &UFunctionsExporter::StartExportingAPI))
+	if (!InitializeUnrealSharp(*UnrealSharpLibraryAssembly, &ManagedPluginsCallbacks, &FCSManagedCallbacks::ManagedCallbacks, (void*)&UFunctionsExporter::StartExportingAPI))
 	{
 		UE_LOG(LogUnrealSharp, Fatal, TEXT("Failed to initialize UnrealSharp!"));
 		return false;
@@ -159,16 +165,16 @@ bool FCSManager::LoadRuntimeHost()
 	void* DLLHandle;
 
 	DLLHandle = FPlatformProcess::GetDllExport(RuntimeHost, TEXT("hostfxr_initialize_for_dotnet_command_line"));
-	Hostfxr_Initialize_For_Dotnet_Command_Line = static_cast<hostfxr_initialize_for_dotnet_command_line_fn>(DLLHandle);
+	Hostfxr_Initialize_For_Dotnet_Command_Line = (hostfxr_initialize_for_dotnet_command_line_fn)DLLHandle;
 
 	DLLHandle = FPlatformProcess::GetDllExport(RuntimeHost, TEXT("hostfxr_initialize_for_runtime_config"));
-	Hostfxr_Initialize_For_Runtime_Config = static_cast<hostfxr_initialize_for_runtime_config_fn>(DLLHandle);
+	Hostfxr_Initialize_For_Runtime_Config = (hostfxr_initialize_for_runtime_config_fn)DLLHandle;
 
 	DLLHandle = FPlatformProcess::GetDllExport(RuntimeHost, TEXT("hostfxr_get_runtime_delegate"));
-	Hostfxr_Get_Runtime_Delegate = static_cast<hostfxr_get_runtime_delegate_fn>(DLLHandle);
+	Hostfxr_Get_Runtime_Delegate = (hostfxr_get_runtime_delegate_fn)DLLHandle;
 
 	DLLHandle = FPlatformProcess::GetDllExport(RuntimeHost, TEXT("hostfxr_close"));
-	Hostfxr_Close = static_cast<hostfxr_close_fn>(DLLHandle);
+	Hostfxr_Close = (hostfxr_close_fn)DLLHandle;
 
 	return Hostfxr_Initialize_For_Dotnet_Command_Line && Hostfxr_Get_Runtime_Delegate && Hostfxr_Close && Hostfxr_Initialize_For_Runtime_Config;
 }
@@ -207,10 +213,10 @@ load_assembly_and_get_function_pointer_fn FCSManager::InitializeRuntimeHost() co
 	FString RuntimeHostPath =  FCSProcHelper::GetRuntimeHostPath();
 
 	hostfxr_initialize_parameters InitializeParameters;
-	InitializeParameters.dotnet_root = *DotNetPath;
-	InitializeParameters.host_path = *RuntimeHostPath;
-	
-	int32 ErrorCode = Hostfxr_Initialize_For_Runtime_Config(*RuntimeConfigPath, &InitializeParameters, &HostFXR_Handle);
+	InitializeParameters.dotnet_root = STRING_TO_CHAR_T(*DotNetPath);
+	InitializeParameters.host_path = STRING_TO_CHAR_T(*RuntimeHostPath);
+
+	int32 ErrorCode = Hostfxr_Initialize_For_Runtime_Config(STRING_TO_CHAR_T(*RuntimeConfigPath), &InitializeParameters, &HostFXR_Handle);
 	
 	if (ErrorCode != 0)
 	{
@@ -229,7 +235,7 @@ load_assembly_and_get_function_pointer_fn FCSManager::InitializeRuntimeHost() co
 		return nullptr;
 	}
 
-	return static_cast<load_assembly_and_get_function_pointer_fn>(LoadAssemblyAndGetFunctionPointer);
+	return (load_assembly_and_get_function_pointer_fn)LoadAssemblyAndGetFunctionPointer;
 }
 
 UPackage* FCSManager::GetUnrealSharpPackage()

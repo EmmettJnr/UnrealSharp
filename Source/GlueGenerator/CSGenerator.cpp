@@ -21,6 +21,17 @@ FName FCSGenerator::BlueprintFunctionLibrary = "BlueprintFunctionLibrary";
 static const FName MD_WorldContext(TEXT("WorldContext"));
 static const FName MD_WorldContextObject(TEXT("WorldContextObject"));
 
+static FCSGenerator* FCSGeneratorInstance = nullptr;
+
+FCSGenerator& FCSGenerator::Get()
+{
+	if (FCSGeneratorInstance == nullptr)
+	{
+		FCSGeneratorInstance = new FCSGenerator();
+	}
+	
+	return *FCSGeneratorInstance;
+}
 
 void FCSGenerator::StartGenerator(const FString& OutputDirectory)
 {

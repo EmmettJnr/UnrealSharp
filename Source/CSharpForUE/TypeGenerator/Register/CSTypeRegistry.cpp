@@ -7,6 +7,8 @@
 #include "TypeInfo/CSClassInfo.h"
 #include "UnrealSharpProcHelper/CSProcHelper.h"
 
+static FCSTypeRegistry* Instance = nullptr;
+
 template<typename T>
 void DeserializeMetaDataObjects(const TArray<TSharedPtr<FJsonValue>>& MetaDataArray, TMap<FName, T>& Map)
 {
@@ -24,6 +26,16 @@ void InitializeBuilders(TMap<FName, T>& Map)
 	{
 		It->Value.InitializeBuilder();
 	}
+}
+
+FCSTypeRegistry& FCSTypeRegistry::Get()
+{
+	if (Instance == nullptr)
+	{
+		Instance = new FCSTypeRegistry();
+	}
+	
+	return *Instance;
 }
 
 bool FCSTypeRegistry::ProcessMetaData(const FString& FilePath)

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "FunctionsExporter.h"
+#include "EnhancedInputComponent.h"
 #include "UEnhancedInputComponentExporter.generated.h"
 
 enum class ETriggerEvent : uint8;

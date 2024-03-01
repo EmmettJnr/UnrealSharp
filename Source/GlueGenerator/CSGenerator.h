@@ -12,12 +12,14 @@ class GLUEGENERATOR_API FCSGenerator
 {
 	
 public:
+	// This instance doesn't seem to be globally static on mac
+	//static FCSGenerator& Get()
+	//{
+	//	static FCSGenerator Instance;
+	//	return Instance;
+	//}
 
-	static FCSGenerator& Get()
-	{
-		static FCSGenerator Instance;
-		return Instance;
-	}
+	static FCSGenerator& Get();
 
 	FCSGenerator(): NameMapper(this)
 	{

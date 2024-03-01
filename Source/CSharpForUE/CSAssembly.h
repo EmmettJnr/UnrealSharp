@@ -4,8 +4,8 @@
 
 struct FCSManagedPluginCallbacks
 {
-	using LoadPluginCallback = GCHandleIntPtr(__stdcall*)(const TCHAR*);
-	using UnloadPluginCallback = bool(__stdcall*)();
+	using LoadPluginCallback = GCHandleIntPtr(__cdecl*)(const TCHAR*);
+	using UnloadPluginCallback = bool(__cdecl*)();
 	
 	LoadPluginCallback LoadPlugin = nullptr;
 	UnloadPluginCallback UnloadPlugin = nullptr;

@@ -14,7 +14,17 @@ public static class DotNetPathFinder
         
         foreach (var path in paths)
         {
-            var fullPath = Path.Combine(path, "dotnet.exe");
+            string fullPath;
+            
+            if (OperatingSystem.IsWindows())
+            {
+                fullPath = Path.Combine(path, "dotnet.exe");
+            }
+            else
+            {
+                fullPath = Path.Combine(path, "dotnet");
+            }
+
             if (File.Exists(fullPath))
             {
                 return fullPath;
